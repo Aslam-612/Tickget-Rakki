@@ -132,18 +132,20 @@ def fetch(cfg):
 
     
     zenrows_key = os.environ.get("SCRAPERAPI_KEY")
+
     if zenrows_key:
-    resp = requests.get(
-        "https://api.zenrows.com/v1/",
-        params={
-            "apikey": zenrows_key,
-            "url": cfg["target_url"],
-        },
-        timeout=90,
-    )
-    resp.raise_for_status()
-    print(f"[ZenRows] HTTP {resp.status_code}")
-    return resp.text
+        print("[ZenRows] Sending request...")
+        resp = requests.get(
+            "https://api.zenrows.com/v1/",
+            params={
+                "apikey": zenrows_key,
+                "url": cfg["target_url"],
+            },
+            timeout=90,
+        )
+        resp.raise_for_status()
+        print(f"[ZenRows] HTTP {resp.status_code}")
+        return resp.text
 
 
     proxy = os.environ.get("PROXY_URL")
