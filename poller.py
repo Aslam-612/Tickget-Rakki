@@ -130,14 +130,21 @@ def fetch(cfg):
     headers = dict(DEFAULT_HEADERS)
     headers.update(cfg.get("headers", {}))
 
-    scraper_key = os.environ.get("SCRAPERAPI_KEY")
-    if scraper_key:
-        api_url = "https://api.scraperapi.com/?" + urllib.parse.urlencode(
-            {"api_key": scraper_key, "country_code": "in", "url": cfg["target_url"]}
-        )
-        resp = requests.get(api_url, timeout=90)
-        resp.raise_for_status()
-        return resp.text
+    
+    zenrows_key = os.environ.get("SCRAPERAPI_KEY")
+    if zenrows_key:
+    resp = requests.get(
+        "https://api.zenrows.com/v1/",
+        params={
+            "apikey": zenrows_key,
+            "url": cfg["target_url"],
+        },
+        timeout=90,
+    )
+    resp.raise_for_status()
+    print(f"[ZenRows] HTTP {resp.status_code}")
+    return resp.text
+
 
     proxy = os.environ.get("PROXY_URL")
     proxies = {"http": proxy, "https": proxy} if proxy else None
